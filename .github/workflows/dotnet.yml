@@ -18,7 +18,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore --output build
+      run: dotnet build --no-restore
     - uses: actions/checkout@v1
     - name: Zip Folder
       run: zip -r app.zip .
