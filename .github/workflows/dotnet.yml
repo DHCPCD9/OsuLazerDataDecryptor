@@ -24,6 +24,8 @@ jobs:
       with:
         files: build
         dest: app.zip
+    - name: Set current date as env variable
+      run: echo "NOW::$(date +'%Y.%m.%dT%H%M%S')" >> $GITHUB_ENV
     - name: Create Draft Release
       id: create_release
       uses: actions/create-release@v1
@@ -31,7 +33,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: Release
-        release_name: Release
+        release_name: Release-$NOW
         draft: true
         prerelease: false
 
