@@ -20,10 +20,10 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore --out build
+      run: dotnet build --no-restore --output build
     - name: Upload to artifact
       uses: actions/upload-artifact@v2
       with:
-        name: lazer-patcher-winos
+        name: osu-lazer-data-decryptor-win
         path: build
       
