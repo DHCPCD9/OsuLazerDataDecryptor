@@ -21,7 +21,7 @@ jobs:
       run: dotnet build --no-restore --output build
     - uses: actions/checkout@v1
     - name: Zip Folder
-      run: zip -r app.zip build
+      run: zip -r app.zip .
     - name: Set current date as env variable
       id: date
       run: echo "::set-output name=date::$(date +'%Y.%m.%d.%s')"
