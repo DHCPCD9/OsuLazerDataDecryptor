@@ -8,7 +8,7 @@ using Realms;
 
 if (args.Length < 2)
 {
-    Console.WriteLine("Usage: OsuLazerDataDecryptor.exe <input-directory> <output-directory>");
+    Console.WriteLine("Usage: <input-directory> <output-directory>");
     return;
 }
 
@@ -27,7 +27,7 @@ if (!Directory.Exists(outputPath))
 }
 
 
-var realm = Realm.GetInstance(new RealmConfiguration(Path.Join(lazerPath, "client2.realm"))
+var realm = Realm.GetInstance(new RealmConfiguration(Path.Join(lazerPath, "client.realm"))
 {
     SchemaVersion = 14
 });
