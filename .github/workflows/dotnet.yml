@@ -35,6 +35,11 @@ jobs:
     - name: Set current date as env variable
       id: date
       run: echo "::set-output name=date::$(date +'%Y.%m.%d.%s')"
+    - uses: actions/checkout@v2
+    - uses: papeloto/action-zip@v1
+      with:
+        files: output/
+        dest: result.zip
     - name: Create Draft Release
       id: create_release
       uses: actions/create-release@v1
@@ -51,10 +56,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./output/osu-lazer-data-decryptor.zip
+        asset_path: result.zip
         asset_name: app.zip
         asset_content_type: application/zip
-
     - uses: eregon/publish-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
