@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  release:
+  windows:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -22,7 +22,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore --output build      
+      run: dotnet build --no-restore --output build --runtime win-x64
     - name: Upload to artifact
       uses: actions/upload-artifact@v2
       with:
