@@ -26,22 +26,80 @@ jobs:
     - name: Upload to artifact
       uses: actions/upload-artifact@v2
       with:
-        name: osu-lazer-data-decryptor
+        name: oldd-windows
         path: build
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - run: mkdir -p build
+    
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore --output build
+    - name: Upload to artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: oldd-linux
+        path: build
+  macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - run: mkdir -p build
+    
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore --output build
+    - name: Upload to artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: oldd-macos
+        path: build
+  release:
+    runs-on: ubuntu-latest
+    steps:
     - uses: actions/download-artifact@v3
       with:
-        name: osu-lazer-data-decryptor
-        path:  output
+        name: oldd-windows
+        path:  output-windows
+    - uses: actions/download-artifact@v3
+      with:
+        name: oldd-linux
+        path:  output-linux
+    - uses: actions/download-artifact@v3
+      with:
+        name: oldd-macos
+        path:  output-macos
     - name: Set current date as env variable
       id: date
       run: echo "::set-output name=date::$(date +'%Y.%m.%d.%s')"
-    - name: Display structure of downloaded files
-      run: ls -R
-      working-directory: output
     - uses: papeloto/action-zip@v1
       with:
-        files: output
-        dest: result.zip
+        files: output-windows
+        dest: win-x64.zip
+    - uses: papeloto/action-zip@v1
+      with:
+        files: output-linux
+        dest: linux-x64.zip
+    - uses: papeloto/action-zip@v1
+      with:
+        files: output-macos
+        dest: macos.zip
     - name: Create Draft Release
       id: create_release
       uses: actions/create-release@v1
@@ -58,11 +116,29 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: result.zip
-        asset_name: app.zip
+        asset_path: win-x64.zip
+        asset_name: win-x64.zip
+        asset_content_type: application/zip
+    - uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: linux-x64.zip
+        asset_name: linux-x64.zip
+        asset_content_type: application/zip
+    - uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: macos.zip
+        asset_name: macos.zip
         asset_content_type: application/zip
     - uses: eregon/publish-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         release_id: ${{ steps.create_release.outputs.id }}
+
+  
