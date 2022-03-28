@@ -19,11 +19,11 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore --output ${{ github.workspace }}/build
-    - uses: papeloto/action-zip@v1
-      with:
-        files: ${{ github.workspace }}
-        recursive: true
-        dest: app.zip
+    - uses: actions/checkout@v1
+    - name: Zip Folder
+      run: zip -r app.zip ${{ github.workspace }}/build/
+      
+      
     - name: Set current date as env variable
       id: date
       run: echo "::set-output name=date::$(date +'%Y.%m.%d.%s')"
