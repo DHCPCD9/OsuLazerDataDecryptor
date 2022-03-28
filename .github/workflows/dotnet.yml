@@ -21,7 +21,7 @@ jobs:
       run: dotnet build --no-restore --output ${{ github.workspace }}/build
     - uses: papeloto/action-zip@v1
       with:
-        files: ${{ github.workspace }}/build/
+        files: ${{ github.workspace }}
         recursive: true
         dest: app.zip
     - name: Set current date as env variable
