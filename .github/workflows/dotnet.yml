@@ -22,10 +22,16 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore --output build
-    - uses: actions/checkout@v1
-    - name: Zip Folder
-      run: zip -r app.zip .
+      run: dotnet build --no-restore --output build      
+    - name: Upload to artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: osu-lazer-data-decryptor
+        path: build
+    - uses: actions/download-artifact@v3
+      with:
+        name: osu-lazer-data-decryptor
+        path: output
     - name: Set current date as env variable
       id: date
       run: echo "::set-output name=date::$(date +'%Y.%m.%d.%s')"
@@ -45,7 +51,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./app.zip
+        asset_path: ./output/osu-lazer-data-decryptor.zip
         asset_name: app.zip
         asset_content_type: application/zip
 
