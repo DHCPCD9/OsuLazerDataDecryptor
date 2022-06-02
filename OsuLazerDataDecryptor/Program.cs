@@ -53,7 +53,13 @@ foreach (var score in replay.ToList())
         continue;
 
     var data = FileUtils.GetEncryptedFilePath(lazerPath, replayFile.File.Hash);
-    File.Copy(data, Path.Join(Path.Join(outputPath, "replays"), $"{score.User.Username} - {score.BeatmapInfo?.Metadata?.ArtistUnicode??"Unknown Artist"} - {score?.BeatmapInfo?.Metadata?.TitleUnicode??"Unknown Beatmap"}[{score?.BeatmapInfo?.DifficultyName??"Unknown difficulty"}].osr"), true);
+    try
+    {
+        File.Copy(data, Path.Join(Path.Join(outputPath, "replays"), $"{score.User.Username} - {score.BeatmapInfo?.Metadata?.ArtistUnicode??"Unknown Artist"} - {score?.BeatmapInfo?.Metadata?.TitleUnicode??"Unknown Beatmap"}[{score?.BeatmapInfo?.DifficultyName??"Unknown difficulty"}].osr"), true);
+    }catch
+    {
+        Console.WriteLine("Failed to export.")
+    }
 }
 Console.WriteLine("Exporting skins...");
 if (!Directory.Exists(Path.Join(outputPath, "skins")))
