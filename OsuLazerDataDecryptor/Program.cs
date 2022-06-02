@@ -58,7 +58,7 @@ foreach (var score in replay.ToList())
         File.Copy(data, Path.Join(Path.Join(outputPath, "replays"), $"{score.User.Username} - {score.BeatmapInfo?.Metadata?.ArtistUnicode??"Unknown Artist"} - {score?.BeatmapInfo?.Metadata?.TitleUnicode??"Unknown Beatmap"}[{score?.BeatmapInfo?.DifficultyName??"Unknown difficulty"}].osr"), true);
     }catch
     {
-        Console.WriteLine("Failed to export.")
+        Console.WriteLine("Failed to export.");
     }
 }
 Console.WriteLine("Exporting skins...");
